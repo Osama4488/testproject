@@ -1,12 +1,13 @@
+@import "~bootstrap/scss/bootstrap";
 .service {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   line-height: 1.5em;
   &__container {
-    width: 1200px;
+    width: 1000px;
     margin: auto;
-    text-align: center;
+    // text-align: center;
     h1 {
       color: #111111;
       font-family: "Poppins", Sans-serif;
@@ -45,7 +46,7 @@
       display: flex;
       margin: auto;
       width: 1140px;
-      margin-top: 50px;
+      margin-top: 520px;
       &__content {
         width: 50%;
         h2 {
