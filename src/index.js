@@ -10,8 +10,8 @@ import Skeleton from "./skeleton-react";
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Skeleton />
+    <App />
+    {/* <Skeleton /> */}
   </React.StrictMode>,
   document.getElementById("root")
 );

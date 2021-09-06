@@ -1,5 +1,6 @@
 import logo from "./logo.svg";
 import lottie from "lottie-web";
+import axios from "axios";
 
 // import './App.css';
 import "./App.scss";
@@ -17,8 +18,19 @@ import {
 
 function App() {
   const [data, setData] = useState([]);
-  // const [state, setState] = useState("custom logo design");
-  // const [state, setState] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [Id, setId] = useState();
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/posts")
+      .then((res) => {
+        setPosts(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const container = useRef(null);
   const onSubmit = (e) => {
     e.preventDefault();
@@ -34,7 +46,7 @@ function App() {
     e.target.elements.formBasicEmail.value = "";
     e.target.elements.formBasicPassword.value = "";
     e.target.elements.formBasicName.value = "";
-    console.log(data, "data");
+    // console.log(data, "data");
     // setData(e.target.elements.formBasicEmail.value);
     // e.map((i) => {
     //   setData(e.target.elements.formBasicPassword.value);
@@ -64,7 +76,10 @@ function App() {
   //     path: "https://assets1.lottiefiles.com/temporary_files/wxTfCl.json", // the path to the animation json
   //   });
   // }, []);
-
+  const getId = (e) => {
+    console.log(e);
+  };
+  console.log(Id);
   return (
     <section className="service">
       <div className="service__container">
@@ -94,91 +109,36 @@ function App() {
             Submit
           </Button>
         </Form>
-        {/* {data?.map((i) => {
-          return (
-            <>
-              
-              <ListGroup variant="flush">
-                <ListGroup.Item>{i.email}</ListGroup.Item>
-                <ListGroup.Item>{i.pass}</ListGroup.Item>
-                <ListGroup.Item>{i.name}</ListGroup.Item>
-              </ListGroup>
-            </>
-          );
-        })} */}
 
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>#</th>
-              <th>Email</th>
-              <th>Password</th>
-              <th>Edit</th>
+              <th>Id</th>
+              <th>Title</th>
+              {/* <th>Body</th> */}
+              <th colSpan="3">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {data?.map((i, index) => {
-              console.log(index, "==");
+            {posts?.map((i, index) => {
               return (
                 <>
-                  <tr>
-                    <td>{index + 1}</td>
-                    <td>{i.email}}</td>
-                    <td>{i.pass}}</td>
-                    <td>{i.name}</td>
+                  <tr key={i?.id}>
+                    <td>{i?.id}</td>
+                    <td>{i.title}</td>
+                    {/* <td>{i.body}</td> */}
+                    <td>
+                      {/* <Button onClick={getId((e) => setId(i?.id))}> */}
+                      <Button onClick={(e) => setId(i?.id)}>Update</Button>
+                      <Button>Delete</Button>
+                      <Button>Edit</Button>
+                    </td>
                   </tr>
                 </>
               );
             })}
           </tbody>
         </Table>
-
-        {/* <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner> */}
-        {/* <h1>Our Services For Startups, SME & Entrepreneurs</h1>
-        <p>
-          Digitaloid is a full-service creative design, brand, web and digital
-          agency that helps brands move forward. Over the years, our agency has
-          helped brands and companies redefine their purpose and unleash their
-          full potential. In addition, we provide our clients with customized
-          marketing solutions according to their target market to expand their
-          businesses.
-        </p>
-
-        <div className="tab">
-          {tabarr.map(({ img, title }) => {
-            console.log(title, "==");
-            return (
-              <div className="tab__wrapper" onClick={() => setState(title)}>
-                <img src={img} width="35px" height="35px" />
-                <p>{title}</p>
-              </div>
-            );
-          })}
-          
-        </div>
-
-        <div className="features__container">
-          {arr.map(({ heading, description, buttontext, img }) => {
-            if (state == heading) {
-              return (
-                <>
-                  <div className="features__container__content">
-                    <h2>{heading}</h2>
-                    <p>{description}</p>
-                    <button>{buttontext}</button>
-                  </div>
-                  <div className="features__container__image">
-                    <img src={img} />
-                  </div>
-                </>
-              );
-            } else {
-            }
-          })}
-       
-        </div> */}
       </div>
     </section>
   );
