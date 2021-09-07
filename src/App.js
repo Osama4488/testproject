@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import lottie from "lottie-web";
 import axios from "axios";
+import { Skeleton } from "antd";
 
 // import './App.css';
 import "./App.scss";
@@ -20,11 +21,14 @@ function App() {
   const [data, setData] = useState([]);
   const [posts, setPosts] = useState([]);
   const [Id, setId] = useState();
+  const [loading, setloading] = useState(true);
   useEffect(() => {
+    setloading(true);
     axios
       .get("https://jsonplaceholder.typicode.com/posts")
       .then((res) => {
         setPosts(res?.data);
+        setloading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -43,6 +47,7 @@ function App() {
     const obj = { email, pass, name };
 
     setData([...data, obj]);
+    // setData([]);
     e.target.elements.formBasicEmail.value = "";
     e.target.elements.formBasicPassword.value = "";
     e.target.elements.formBasicName.value = "";
@@ -67,24 +72,14 @@ function App() {
     setData([...data, obj]);
   }, []);
 
-  // useEffect(() => {
-  //   lottie.loadAnimation({
-  //     container: document.getElementsByClassName("container"), // the dom element that will contain the animation
-  //     renderer: "svg",
-  //     loop: true,
-  //     autoplay: true,
-  //     path: "https://assets1.lottiefiles.com/temporary_files/wxTfCl.json", // the path to the animation json
-  //   });
-  // }, []);
-  const getId = (e) => {
-    console.log(e);
+  const Delete = () => {
+    alert("osama");
   };
-  console.log(Id);
   return (
     <section className="service">
       <div className="service__container">
         <h1>osama</h1>
-        {/* <div className="container" style={{ height: "500px" }}></div> */}
+
         <Form onSubmit={(e) => onSubmit(e)}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -102,35 +97,35 @@ function App() {
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" placeholder="Name" />
           </Form.Group>
-          {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group> */}
+
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </Form>
-
-        <Table striped bordered hover>
+        <h1> {Id} </h1>
+        <Table>
           <thead>
             <tr>
               <th>Id</th>
-              <th>Title</th>
-              {/* <th>Body</th> */}
-              <th colSpan="3">Actions</th>
+              <th>email</th>
+              <th>pass</th>
+
+              <th>name</th>
+              <th colSpan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {posts?.map((i, index) => {
+            {data?.map((i, index) => {
               return (
                 <>
-                  <tr key={i?.id}>
-                    <td>{i?.id}</td>
-                    <td>{i.title}</td>
-                    {/* <td>{i.body}</td> */}
+                  <tr>
+                    <td>{index} </td>
+                    <td>{i?.email}</td>
+                    <td>{i?.pass}</td>
+                    <td>{i?.name}</td>
                     <td>
-                      {/* <Button onClick={getId((e) => setId(i?.id))}> */}
-                      <Button onClick={(e) => setId(i?.id)}>Update</Button>
-                      <Button>Delete</Button>
+                      <Button onClick={(e) => setId(index)}>Update</Button>
+                      <Button onClick={Delete}>Delete</Button>
                       <Button>Edit</Button>
                     </td>
                   </tr>
@@ -139,6 +134,42 @@ function App() {
             })}
           </tbody>
         </Table>
+        {/* <h1>{Id}</h1> */}
+        {/* <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Title</th>
+             
+              <th colSpan="3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <>
+                <Skeleton delay={1} style={{ width: "100%" }} />
+              </>
+            ) : (
+              posts?.map((i, index) => {
+                return (
+                  <>
+                    <tr key={i?.id}>
+                      <td>{i?.id}</td>
+                      <td>{i.title}</td>
+                      
+                      <td>
+                        
+                        <Button onClick={(e) => setId(i?.id)}>Update</Button>
+                        <Button>Delete</Button>
+                        <Button>Edit</Button>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })
+            )}
+          </tbody>
+        </Table> */}
       </div>
     </section>
   );
