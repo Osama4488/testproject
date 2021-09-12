@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import lottie from "lottie-web";
 import axios from "axios";
-import { Skeleton } from "antd";
+import { Skeleton, Modal } from "antd";
 
 // import './App.css';
 import "./App.scss";
@@ -22,6 +22,39 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [Id, setId] = useState();
   const [loading, setloading] = useState(true);
+  const [test, setTest] = useState([
+    {
+      id: 0,
+      email: "osama@gmail.com",
+      pass: "123",
+      name: "osama",
+    },
+    {
+      id: 1,
+      email: "osama123@gmail.com",
+      pass: "123",
+      name: "osama",
+    },
+    {
+      id: 2,
+      email: "osamaasdas@gmail.com",
+      pass: "123",
+      name: "osama",
+    },
+    {
+      id: 3,
+      email: "osama987@gmail.com",
+      pass: "123",
+      name: "osama",
+    },
+  ]);
+  const [update, setUpdate] = useState({
+    id: 0,
+    email: "",
+    pass: "",
+    name: "",
+  });
+  let objIndex;
   useEffect(() => {
     setloading(true);
     axios
@@ -35,29 +68,35 @@ function App() {
       });
   }, []);
 
-  const container = useRef(null);
+  // const container = useRef(null);
   const onSubmit = (e) => {
     e.preventDefault();
+    let id = e.target.elements.formBasicId.value;
     let email = e.target.elements.formBasicEmail.value;
     let pass = e.target.elements.formBasicPassword.value;
     let name = e.target.elements.formBasicName.value;
     localStorage.setItem("email", email);
     localStorage.setItem("password", pass);
     localStorage.setItem("name", name);
-    const obj = { email, pass, name };
+    const obj = { id, email, pass, name };
+
+    setUpdate(obj);
+    objIndex = test.findIndex((obj) => obj.id == id);
+    test[objIndex].name = name;
+    test[objIndex].email = email;
+    test[objIndex].pass = pass;
+    test[objIndex].id = id;
+    handleCancel();
 
     setData([...data, obj]);
     // setData([]);
     e.target.elements.formBasicEmail.value = "";
     e.target.elements.formBasicPassword.value = "";
     e.target.elements.formBasicName.value = "";
-    // console.log(data, "data");
-    // setData(e.target.elements.formBasicEmail.value);
-    // e.map((i) => {
-    //   setData(e.target.elements.formBasicPassword.value);
-    // });
-    /*How to get name value?*/
   };
+  console.log(update, "update");
+  // console.log(data, "update");
+
   <script
     src="https://cdnjs.com/libraries/bodymovin"
     type="text/javascript"
@@ -66,15 +105,40 @@ function App() {
     const email = localStorage.getItem("email");
     const name = localStorage.getItem("name");
     const pass = localStorage.getItem("password");
-
     const obj = { email, pass, name };
-
     setData([...data, obj]);
   }, []);
 
-  const Delete = () => {
-    alert("osama");
+  //  MOdal
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [newInput, setNewInput] = useState("");
+  const showModal = (e) => {
+    setUpdate(e);
+    setIsModalVisible(true);
   };
+
+  const handleSubmit = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleRemoveItem = (e) => {
+    setTest(test.filter((item) => item.id !== e));
+  };
+  const handleUpdateItem = (e) => {
+    // setTest(test.filter((item) => item.id !== e));
+  };
+  const handleChange = (e) => {
+    // this.setState({value: event.target.value});
+    // setUpdate(email, e.target.elements.formBasicEmail.value);
+    // console.log(e.target.value, "text");
+  };
+
+  // console.log(update.email, "text");
   return (
     <section className="service">
       <div className="service__container">
@@ -115,20 +179,80 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {data?.map((i, index) => {
+            {test?.map((i, index) => {
               return (
                 <>
                   <tr>
-                    <td>{index} </td>
+                    <td>{i?.id} </td>
                     <td>{i?.email}</td>
                     <td>{i?.pass}</td>
                     <td>{i?.name}</td>
                     <td>
-                      <Button onClick={(e) => setId(index)}>Update</Button>
-                      <Button onClick={Delete}>Delete</Button>
+                      <Button onClick={() => showModal(i)}>Update</Button>
+                      <Button
+                        onClick={() => {
+                          handleRemoveItem(i?.id);
+                        }}
+                      >
+                        Delete
+                      </Button>
                       <Button>Edit</Button>
                     </td>
                   </tr>
+                  <Modal
+                    title="Basic Modal"
+                    visible={isModalVisible}
+                    onOk={handleSubmit}
+                    onCancel={handleCancel}
+                    okText="Submit"
+                  >
+                    {/* <h1>{update.email}</h1> */}
+                    <Form onSubmit={(e) => onSubmit(e)}>
+                      <Form.Group className="mb-3" controlId="formBasicId">
+                        <Form.Label>Id</Form.Label>
+                        <Form.Control
+                          type="number"
+                          disabled
+                          value={update?.id}
+                        />
+                      </Form.Group>
+                      <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control
+                          type="email"
+                          value={update?.email}
+                          placeholder="Enter email"
+                          onChange={(e) => setUpdate({ email: e.target.value })}
+                        />
+                      </Form.Group>
+
+                      <Form.Group
+                        className="mb-3"
+                        controlId="formBasicPassword"
+                      >
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                          type="password"
+                          value={update?.pass}
+                          placeholder="Password"
+                          onChange={(e) => setUpdate({ pass: e.target.value })}
+                        />
+                      </Form.Group>
+                      <Form.Group className="mb-3" controlId="formBasicName">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={update?.name}
+                          placeholder="Name"
+                          onChange={(e) => setUpdate({ name: e.target.value })}
+                        />
+                      </Form.Group>
+
+                      <Button variant="primary" type="submit">
+                        Submit
+                      </Button>
+                    </Form>
+                  </Modal>
                 </>
               );
             })}
