@@ -23,34 +23,8 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [Id, setId] = useState();
   const [loading, setloading] = useState(true);
-  const [test, setTest] = useState([
-    // {
-    //   id: 0,
-    //   email: "osama@gmail.com",
-    //   pass: "123",
-    //   name: "osama",
-    // },
-    // {
-    //   id: 1,
-    //   email: "osama123@gmail.com",
-    //   pass: "123",
-    //   name: "osama",
-    // },
-    // {
-    //   id: 2,
-    //   email: "osamaasdas@gmail.com",
-    //   pass: "123",
-    //   name: "osama",
-    // },
-    // {
-    //   id: 3,
-    //   email: "osama987@gmail.com",
-    //   pass: "123",
-    //   name: "osama",
-    // },
-  ]);
+  const [test, setTest] = useState([]);
 
-  const [local, setLocal] = useState({});
   const [update, setUpdate] = useState({
     id: 0,
     email: "",
@@ -111,17 +85,10 @@ function App() {
     type="text/javascript"
   ></script>;
   useEffect(() => {
-    // const email = localStorage.getItem("email");
-    // const name = localStorage.getItem("name");
-    // const pass = localStorage.getItem("password");
-    // const obj = { email, pass, name };
-    // setTest([...test, obj]);
     const jsondata = JSON.parse(localStorage.getItem("arr")) || [];
     setTest(jsondata);
-    console.log(jsondata, "test");
   }, []);
 
-  // console.log(localStorage, "test");
   //  MOdal
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -141,6 +108,22 @@ function App() {
 
   const handleRemoveItem = (e) => {
     setTest(test.filter((item) => item.id !== e));
+    console.log(test, "test");
+    // {
+    //   test.map((i) => {
+    //     console.log(i.id);
+    //   });
+    // }
+    // console.log(test, "test");
+
+    const newData = [...test];
+    console.log(newData, "newdata");
+    // localStorage.clear();
+    // console.log(localStorage);
+    localStorage.setItem("arr", JSON.stringify(newData));
+    console.log(localStorage);
+    // console.log(test, "test");
+    // localStorage.removeItem("arr", e);
   };
   const handleUpdateItem = (e) => {
     // setTest(test.filter((item) => item.id !== e));
@@ -178,7 +161,6 @@ function App() {
           </Button>
         </Form>
 
-        {/* <h1>{Id}</h1> */}
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -187,7 +169,7 @@ function App() {
               <th>Pass</th>
               <th>Name</th>
 
-              <th colSpan="3">Actions</th>
+              <th colSpan="2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -202,7 +184,9 @@ function App() {
 
                     <td>
                       <Button onClick={(e) => setId(i?.id)}>Update</Button>
-                      <Button>Delete</Button>
+                      <Button onClick={() => handleRemoveItem(i?.id)}>
+                        Delete
+                      </Button>
                       <Button>Edit</Button>
                     </td>
                   </tr>

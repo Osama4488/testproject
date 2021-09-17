@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+import Blog from "./blog";
 import reportWebVitals from "./reportWebVitals";
 import { Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,7 +11,8 @@ import Skeleton from "./skeleton-react";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <Blog />
     {/* <Skeleton /> */}
   </React.StrictMode>,
   document.getElementById("root")
