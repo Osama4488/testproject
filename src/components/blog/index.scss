@@ -1,8 +1,30 @@
 .blog-section {
+  background-color: cornflowerblue;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 100px;
+  flex-wrap: wrap;
   .box {
-    background-color: rgb(201, 199, 199);
+    background-color: #fff;
+    border-radius: 10px;
+    width: 25%;
+    padding: 10px;
+    color: coral;
+    font-weight: 600;
+    .id {
+      color: green;
+      font-weight: 700;
+    }
+    .title {
+      font-weight: 700;
+    }
+    .description {
+      color: purple;
+    }
+    &:hover {
+      cursor: pointer;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
   }
 }
