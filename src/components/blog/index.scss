@@ -12,6 +12,7 @@
     padding: 10px;
     color: coral;
     font-weight: 600;
+    min-height: 180px;
     .id {
       color: green;
       font-weight: 700;
@@ -21,6 +22,18 @@
     }
     .description {
       color: purple;
+
+      line-height: 20px;
+      color: #4b587c;
+      margin: 0 0 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-weight: 400;
+      font-size: 13px;
+      text-align: left;
     }
     &:hover {
       cursor: pointer;

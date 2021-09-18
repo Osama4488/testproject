@@ -1,7 +1,5 @@
-import lottie from "lottie-web";
-import axios from "axios";
-import { Skeleton, Modal } from "antd";
-import { v4 as uuidv4 } from "uuid";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+// import { v4 as uuidv4 } from "uuid";
 import "./index.scss";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -13,38 +11,43 @@ import {
   ListGroup,
   Spinner,
 } from "react-bootstrap";
-
+import App from "../../App";
+import Osama from "../../osama";
 export default function Index() {
   const { v4: uuidv4 } = require("uuid");
   const [data, setData] = useState([]);
-
+  useEffect(() => {
+    const jsondata = JSON.parse(localStorage.getItem("arr")) || [];
+    console.log(jsondata);
+    setData(jsondata);
+  }, []);
   const onSubmit = (e) => {
     e.preventDefault();
-    // let id = e.target.elements.formBasicId.value;
+
     let id = e.target.elements.formBasicId.value;
-    let email = e.target.elements.formBasicEmail.value;
-    let pass = e.target.elements.formBasicPassword.value;
-    let name = e.target.elements.formBasicName.value;
+    let name = e.target.elements.formBasicBlogName.value;
+    let content = e.target.elements.formBasicBlogContent.value;
 
-    const obj = { id, email, pass, name };
-
-    const newData = [...test, obj];
+    const obj = { id, name, content };
+    const newData = [...data, obj];
 
     localStorage.setItem("arr", JSON.stringify(newData));
 
     setData(newData);
 
-    e.target.elements.formBasicEmail.value = "";
-    e.target.elements.formBasicPassword.value = "";
-    e.target.elements.formBasicName.value = "";
+    e.target.elements.formBasicId.value = "";
+    e.target.elements.formBasicBlogName.value = "";
+    e.target.elements.formBasicBlogContent.value = "";
   };
+
+  const openPage = () => {};
   return (
     <>
       <div style={{ padding: "0px 100px 0px" }}>
         <Form onSubmit={(e) => onSubmit(e)}>
           <Form.Group className="mb-3" controlId="formBasicId">
             <Form.Label>Id</Form.Label>
-            <Form.Control disabled type="number" placeholder={uuidv4()} />
+            <Form.Control disabled placeholder={uuidv4()} value={uuidv4()} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicBlogName">
             <Form.Label>Blog Name</Form.Label>
@@ -65,16 +68,34 @@ export default function Index() {
         </Form>
       </div>
       <section className="blog-section">
-        <div className="box">
-          <div className="id">70797097097</div>
+        {data?.map((i) => {
+          return (
+            // <Router>
+            //   <Route path="/osama" component={Osama} />
+            //   <div
+            //     onClick={() => openPage()}
+            //     key={Math.random()}
+            //     className="box"
+            //   >
+            //     <div className="id">{i?.id}</div>
 
-          <div className="title">osama</div>
-          <div className="description">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s
-          </div>
-        </div>
+            //     <div className="title">{i?.name}</div>
+            //     <div className="description">{i?.content}</div>
+            //   </div>
+            // </Router>
+
+            <div onClick={() => openPage()} key={Math.random()} className="box">
+              <div className="id">
+                <Router>
+                  <Link to={`/components/blog/${i?.id}`}> {i?.id}</Link>{" "}
+                </Router>
+              </div>
+
+              <div className="title">{i?.name}</div>
+              <div className="description">{i?.content}</div>
+            </div>
+          );
+        })}
       </section>
     </>
   );
