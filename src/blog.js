@@ -71,16 +71,19 @@ export default function Index() {
                 key={Math.random()}
                 className="box"
               >
-                <div className="id">
-                  <Router>
-                    <Link to="/App"> {i?.id}</Link>
-                  </Router>
-                </div>
+                <Link
+                  to={{
+                    pathname: `/blog/${i?.id}`,
+                    query: {
+                      name: "aaaa",
+                    },
+                  }}
+                >
+                  <div className="id">{i?.id}</div>
 
-                <div className="title">{i?.name}</div>
-                <div className="description">
-                  <Link to={`/blog/${i?.id}`}>{i?.content}</Link>
-                </div>
+                  <div className="title">{i?.name}</div>
+                  <div className="description">{i?.content}</div>
+                </Link>
               </div>
             </>
           );

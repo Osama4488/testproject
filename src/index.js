@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import ItemDetail from "./itemDetails";
 import Skeleton from "./skeleton-react";
+import { useLocation, useParams } from "react-router";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,10 +28,12 @@ ReactDOM.render(
           </Link>
         </ul>
       </nav>
+
       <Switch>
         <Route path="/osama" component={Osama} />
         <Route path="/blog" exact component={Blog} />
         <Route path="/blog/:id" component={ItemDetail} />
+        {/* <Route path="/blog/:id" component={() => <ItemDetail name="osama" />} /> */}
       </Switch>
 
       {/* <App /> */}
