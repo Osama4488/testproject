@@ -4,7 +4,6 @@ import axios from "axios";
 import { Skeleton, Modal } from "antd";
 import { v4 as uuidv4 } from "uuid";
 
-// import './App.css';
 import "./App.scss";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -15,8 +14,6 @@ import {
   ListGroup,
   Spinner,
 } from "react-bootstrap";
-
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const { v4: uuidv4 } = require("uuid");
@@ -62,7 +59,7 @@ function App() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // let id = e.target.elements.formBasicId.value;
+
     let id = uuidv4();
     let email = e.target.elements.formBasicEmail.value;
     let pass = e.target.elements.formBasicPassword.value;
@@ -80,6 +77,27 @@ function App() {
     e.target.elements.formBasicPassword.value = "";
     e.target.elements.formBasicName.value = "";
   };
+  const modalSubmit = (e) => {
+    e.preventDefault();
+
+    let id = e.target.elements.formBasicId.value;
+    let email = e.target.elements.formBasicEmail.value;
+    let pass = e.target.elements.formBasicPassword.value;
+    let name = e.target.elements.formBasicName.value;
+
+    const obj = { id, email, pass, name };
+
+    const newData = [...test, obj];
+
+    localStorage.setItem("arr", JSON.stringify(newData));
+
+    setTest(newData);
+
+    e.target.elements.formBasicEmail.value = "";
+    e.target.elements.formBasicPassword.value = "";
+    e.target.elements.formBasicName.value = "";
+    setIsModalVisible(false);
+  };
 
   <script
     src="https://cdnjs.com/libraries/bodymovin"
@@ -95,36 +113,32 @@ function App() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newInput, setNewInput] = useState("");
   const showModal = (e) => {
-    setUpdate(e);
+    const result = test.filter((item) => item.id === e);
+    console.log(result, "cc");
+    setUpdate(result[0]);
+
+    console.log(e, "bb");
     setIsModalVisible(true);
   };
 
   const handleSubmit = () => {
     setIsModalVisible(false);
   };
-
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
   const handleRemoveItem = (e) => {
+    const result = test.filter((item) => item.id !== e);
     setTest(test.filter((item) => item.id !== e));
-    console.log(test, "test");
-    // {
-    //   test.map((i) => {
-    //     console.log(i.id);
-    //   });
-    // }
-    // console.log(test, "test");
 
-    const newData = [...test];
-    console.log(newData, "newdata");
-    // localStorage.clear();
-    // console.log(localStorage);
+    const newData = [...result];
+
     localStorage.setItem("arr", JSON.stringify(newData));
-    console.log(localStorage);
-    // console.log(test, "test");
-    // localStorage.removeItem("arr", e);
+    console.log(test, "test");
   };
   const handleUpdateItem = (e) => {
     // setTest(test.filter((item) => item.id !== e));
@@ -184,7 +198,8 @@ function App() {
                     <td>{i.name}</td>
 
                     <td>
-                      <Button onClick={(e) => setId(i?.id)}>Update</Button>
+                      <Button onClick={() => showModal(i.id)}>Update</Button>
+
                       <Button onClick={() => handleRemoveItem(i?.id)}>
                         Delete
                       </Button>
@@ -194,6 +209,55 @@ function App() {
                 </>
               );
             })}
+            <Modal
+              title="Basic Modal"
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <Form onSubmit={(e) => modalSubmit(e)}>
+                <Form.Group className="mb-3" controlId="formBasicId">
+                  <Form.Label>Id</Form.Label>
+                  <Form.Control
+                    type="number"
+                    disabled
+                    placeholder={update.id}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={update.email}
+                  />
+                  <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                  </Form.Text>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={update.pass}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Name"
+                    value={update.name}
+                  />
+                </Form.Group>
+
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Modal>
           </tbody>
         </Table>
       </div>

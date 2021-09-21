@@ -18,19 +18,21 @@ ReactDOM.render(
       <nav>
         <ul>
           <Link to="/osama">
-            {" "}
             <li>Osama</li>
           </Link>
-        </ul>
-        <ul>
+
           <Link to="/blog">
             <li>Blog</li>
+          </Link>
+          <Link to="/app">
+            <li>App</li>
           </Link>
         </ul>
       </nav>
 
       <Switch>
         <Route path="/osama" component={Osama} />
+        <Route path="/app" component={App} />
         <Route path="/blog" exact component={Blog} />
         <Route path="/blog/:id" component={ItemDetail} />
         {/* <Route path="/blog/:id" component={() => <ItemDetail name="osama" />} /> */}
