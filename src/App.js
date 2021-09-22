@@ -1,38 +1,24 @@
-import logo from "./logo.svg";
-import lottie from "lottie-web";
-import axios from "axios";
-import { Skeleton, Modal } from "antd";
-import { v4 as uuidv4 } from "uuid";
+import { Modal } from "antd";
+// import { v4 as uuidv4 } from "uuid";
 
 import "./App.scss";
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Form,
-  Button,
-  Alert,
-  Table,
-  ListGroup,
-  Spinner,
-} from "react-bootstrap";
+import { Form, Button, Table } from "react-bootstrap";
 
 function App() {
+  // const [data, setData] = useState([]);
+  // const [posts, setPosts] = useState([]);
+  // const [Id, setId] = useState();
+  // const [loading, setloading] = useState(true);
   const { v4: uuidv4 } = require("uuid");
-  const [data, setData] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [Id, setId] = useState();
-  const [loading, setloading] = useState(true);
   const [test, setTest] = useState([]);
 
   const [update, setUpdate] = useState({
-    id: 0,
+    id: "0",
     email: "",
     pass: "",
     name: "",
   });
-  const [object, setObject] = useState({});
-  let content = {
-    arr: [],
-  };
 
   // const setdata = (insertedValue) => {
   //   return {
@@ -43,7 +29,7 @@ function App() {
   //   const obj = {};
   // };
   // const newData = [...content.arr];
-  let objIndex;
+
   // useEffect(() => {
   //   setloading(true);
   //   axios
@@ -86,12 +72,21 @@ function App() {
     let name = e.target.elements.formBasicName.value;
 
     const obj = { id, email, pass, name };
+    const newObj = test.findIndex((e) => e.id == id);
+    test[newObj].name = name;
+    test[newObj].id = id;
+    test[newObj].email = email;
+    test[newObj].pass = pass;
+    const newData = [...test, test];
+    // setTest(newData);
+    console.log(test, "test");
+    console.log(newData, "Newdata");
+    // setTest(...test,obj)
+    // setUpdate({ email: email, pass: pass, name: name });
+    // console.log(obj, "obj");
+    // const newData = [...test, obj];
 
-    const newData = [...test, obj];
-
-    localStorage.setItem("arr", JSON.stringify(newData));
-
-    setTest(newData);
+    localStorage.setItem("arr", JSON.stringify(test));
 
     e.target.elements.formBasicEmail.value = "";
     e.target.elements.formBasicPassword.value = "";
@@ -114,10 +109,9 @@ function App() {
   const [newInput, setNewInput] = useState("");
   const showModal = (e) => {
     const result = test.filter((item) => item.id === e);
-    console.log(result, "cc");
+
     setUpdate(result[0]);
 
-    console.log(e, "bb");
     setIsModalVisible(true);
   };
 
@@ -138,10 +132,6 @@ function App() {
     const newData = [...result];
 
     localStorage.setItem("arr", JSON.stringify(newData));
-    console.log(test, "test");
-  };
-  const handleUpdateItem = (e) => {
-    // setTest(test.filter((item) => item.id !== e));
   };
 
   return (
@@ -190,7 +180,7 @@ function App() {
           <tbody>
             {test.map((i) => {
               return (
-                <>
+                <React.Fragment key={Math.random()}>
                   <tr key={i?.id}>
                     <td>{i?.id}</td>
                     <td>{i.email}</td>
@@ -206,7 +196,7 @@ function App() {
                       <Button>Edit</Button>
                     </td>
                   </tr>
-                </>
+                </React.Fragment>
               );
             })}
             <Modal
@@ -219,9 +209,9 @@ function App() {
                 <Form.Group className="mb-3" controlId="formBasicId">
                   <Form.Label>Id</Form.Label>
                   <Form.Control
-                    type="number"
+                    value={update.id}
                     disabled
-                    placeholder={update.id}
+                    onChange={(e) => e.target.value}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -230,6 +220,7 @@ function App() {
                     type="email"
                     placeholder="Enter email"
                     value={update.email}
+                    onChange={(e) => setUpdate(e.target.value)}
                   />
                   <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
@@ -242,6 +233,7 @@ function App() {
                     type="password"
                     placeholder="Password"
                     value={update.pass}
+                    onChange={(e) => setUpdate(e.target.value)}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicName">
@@ -250,6 +242,7 @@ function App() {
                     type="text"
                     placeholder="Name"
                     value={update.name}
+                    onChange={(e) => setUpdate(e.target.value)}
                   />
                 </Form.Group>
 
